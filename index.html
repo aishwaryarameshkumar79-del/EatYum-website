@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EatYum - Authentic Indian Cuisine</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #FF6B35;
+            --secondary: #F7931E;
+            --dark: #1a1a1a;
+            --light: #FFF8F0;
+            --accent: #C1121F;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark);
+            overflow-x: hidden;
+            background: var(--light);
+        }
+
+        .nav {
+            position: fixed;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: var(--dark);
+            transition: all 0.3s;
+        }
+
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 50%, #FFB549 100%);
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="2" cy="2" r="1" fill="rgba(255,255,255,0.1)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-text h1 {
+            font-size: 4.5rem;
+            font-weight: 900;
+            color: white;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-text p {
+            font-size: 1.3rem;
+            color: rgba(255,255,255,0.95);
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease 0.2s backwards;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            animation: fadeInUp 1s ease 0.4s backwards;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 3px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        .hero-image {
+            position: relative;
+            animation: fadeInRight 1s ease;
+        }
+
+        .food-circle {
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            position: relative;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .food-icon {
+            font-size: 15rem;
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.3));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .section {
+            padding: 5rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-title .underline {
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            margin: 0 auto;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .feature-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .menu-section {
+            background: linear-gradient(to bottom, var(--light), white);
+        }
+
+        .menu-categories {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            padding: 0.8rem 2rem;
+            border: 2px solid var(--primary);
+            background: white;
+            color: var(--primary);
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .category-btn.active,
+        .category-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .menu-item {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .menu-item-image {
+            height: 250px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-item-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.3);
+            transition: left 0.5s;
+        }
+
+        .menu-item:hover .menu-item-image::after {
+            left: 100%;
+        }
+
+        .menu-item-content {
+            padding: 1.5rem;
+        }
+
+        .menu-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .menu-item-header h3 {
+            font-size: 1.5rem;
+            color: var(--dark);
+        }
+
+        .price {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--primary);
+        }
+
+        .menu-item-content p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .spice-level {
+            display: flex;
+            gap: 0.3rem;
+        }
+
+        .spice-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        .reservation-section {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+        }
+
+        .reservation-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            padding: 3rem;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 15px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: white;
+            background: rgba(255,255,255,0.3);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .success-message {
+            background: rgba(255,255,255,0.2);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .success-message h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-section {
+            background: var(--dark);
+            color: white;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .contact-card {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+
+        .contact-card:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-5px);
+        }
+
+        .contact-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .contact-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-card p {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .hours {
+            background: rgba(255,255,255,0.05);
+            padding: 2rem;
+            border-radius: 20px;
+            margin-top: 3rem;
+        }
+
+        .hours h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .hours-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .hours-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+        }
+
+        footer {
+            background: #0a0a0a;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        footer .logo {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background: white;
+                flex-direction: column;
+                padding: 2rem;
+                transition: left 0.3s;
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-text h1 {
+                font-size: 3rem;
+            }
+
+            .food-circle {
+                width: 300px;
+                height: 300px;
+            }
+
+            .food-icon {
+                font-size: 10rem;
+            }
+
+            .cta-buttons {
+                justify-content: center;
+            }
+
+            .section-title h2 {
+                font-size: 2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="logo">EatYum</div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#menu">Menu</a></li>
+                <li><a href="#reservation">Reserve</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Taste the Real India at EatYum</h1>
+                <p>Experience authentic flavors, traditional recipes, and modern ambiance. Every dish tells a story of heritage and passion.</p>
+                <div class="cta-buttons">
+                    <a href="#menu" class="btn btn-primary">Explore Menu</a>
+                    <a href="#reservation" class="btn btn-secondary">Book Table</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="food-circle">
+                    <div class="food-icon">🍛</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="about">
+        <div class="section-title">
+            <h2>Why Choose EatYum</h2>
+            <div class="underline"></div>
+        </div>
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">👨‍🍳</div>
+                <h3>Master Chefs</h3>
+                <p>Our chefs bring decades of experience from different regions of India, crafting authentic dishes with love and expertise.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌿</div>
+                <h3>Fresh Ingredients</h3>
+                <p>We source premium spices and ingredients daily, ensuring every meal is prepared with the freshest produce available.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🏆</div>
+                <h3>Award Winning</h3>
+                <p>Recognized for excellence in taste and service, EatYum has won multiple culinary awards and customer hearts.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section menu-section" id="menu">
+        <div class="section-title">
+            <h2>Our Signature Menu</h2>
+            <div class="underline"></div>
+        </div>
+        <div class="menu-categories">
+            <button class="category-btn active" data-category="all">All</button>
+            <button class="category-btn" data-category="appetizers">Appetizers</button>
+            <button class="category-btn" data-category="mains">Main Course</button>
+            <button class="category-btn" data-category="breads">Breads</button>
+            <button class="category-btn" data-category="desserts">Desserts</button>
+        </div>
+        <div class="menu-grid" id="menuGrid">
+            <div class="menu-item" data-category="appetizers">
+                <div class="menu-item-image">🥟</div>
+                <div class="menu-item-content">
+                    <div class="menu-item-header">
+                        <h3>Samosa</h3>
+                        <span class="price">₹80</span>
+                    </div>
+                    <p>Crispy triangular pastry filled with spiced potatoes and peas</p>
+                    <div class="spice-level">
+                        <div class="spice-dot"></div>
+                        <div class="spice-dot"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item" data-category="appetizers">
+                <div class="menu-item-image">🧆</div>
+                <div class="menu-item-content">
+                    <div class="menu-item-header">
+                        <h3>Paneer Tikka</h3>
+                        <span class="price">₹220</span>
+                    </div>
+                    <p>Marinated cottage cheese cubes grilled in tandoor with bell peppers</p>
+                    <div class="spice-level">
+                        <div class="spice-dot"></div>
+                        <div class="spice-dot"></div>
+                        <div class="spice-dot"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item" data-category="mains">
+                <div class="menu-item-image">🍗</div>
+                <div class="menu-item-content">
+                    <div class="menu-item-header">
+                        <h3>Butter Chicken</h3>
+                        <span class="price">₹380</span>
+                    </div>
+                    <p>Tender chicken in rich, creamy tomato-based gravy with aromatic spices</p>
+                    <div class="spice-level">
+                        <div class="spice-dot"></div>
+                        <div class="spice-dot"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item" data-category="mains">
+                <div class="menu-item-image">🍲</div>
+                <div class="menu-item-content">
+                    <div class="menu-item-header">
+                        <h3>Paneer Butter Masala</h3>
+                        <span class="price">₹280</span>
+                    </div>
+                    <p>Cottage cheese cooked in smooth butter sauce with Indian spices</p>
+                    <div class="spice-level">
+                        <div class="spice-dot"></div>
+                        <div class="spice-dot"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item" data-category="mains">
+                <div class="menu-item-image">🍚</div>
+                <div class="menu-item-content">
+                    <div class="menu-item-header">
+                        <h3>Hyderabadi Biryani</h3>
+                        <span class="price">₹320</span>
+                    </div>
+                    <p>Fragrant basmati rice layered with marinated meat and aromatic spices</p>
+                    <div class="spice-level">
+                        <div class="spice-dot"></div>
+                        <div class="spice-dot"></div>
+                        <div class="spice-dot"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item" data-category="breads">
+                <div class="menu-item-image">🫓</div>
+                <div class="menu-item-content">
+                    <div class="menu-item-header">
+                        <h3>Butter Naan</h3>
+                        <span class="price">₹50</span>
+                    </div>
+                    <p>Soft leavened bread brushed with melted butter from tandoor</p>
+                    <div class="spice-level">
+                        <div class="spice-dot"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item" data-category="breads">
+                <div class="menu-item-image">🥖</div>
+                <div class="menu-item-content">
+                    <div class="menu-item-header">
+                        <h3>Garlic Naan</h3>
+                        <span class="price">₹60</span>
+                    </div>
+                    <p>Naan topped with fresh garlic and coriander, perfect with any curry</p>
+                    <div class="spice-level">
+                        <div class="spice-dot"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item" data-category="desserts">
+                <div class="menu-item-image">🍮</div>
+                <div class="menu-item-content">
+                    <div class="menu-item-header">
+                        <h3>Gulab Jamun</h3>
+                        <span class="price">₹100</span>
+                    </div>
+                    <p>Deep-fried milk dumplings soaked in fragrant sugar syrup</p>
+                    <div class="spice-level">
+                        <div class="spice-dot"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section reservation-section" id="reservation">
+        <div class="section-title">
+            <h2>Reserve Your Table</h2>
+            <div class="underline"></div>
+        </div>
+        <div class="reservation-form" id="reservationForm">
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="name" placeholder="Enter your name" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="tel" id="phone" placeholder="+91 98765 43210" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" id="date" required>
+                </div>
+                <div class="form-group">
+                    <label>Time</label>
+                    <input type="time" id="time" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Number of Guests</label>
+                <select id="guests" required>
+                    <option value="1">1 Guest</option>
+                    <option value="2" selected>2 Guests</option>
+                    <option value="3">3 Guests</option>
+                    <option value="4">4 Guests</option>
+                    <option value="5">5 Guests</option>
+                    <option value="6">6 Guests</option>
+                    <option value="7">7 Guests</option>
+                    <option value="8">8+ Guests</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" style="width: 100%;" onclick="submitReservation()">Confirm Reservation</button>
+        </div>
+    </section>
+
+    <section class="section contact-section" id="contact">
+        <div class="section-title">
+            <h2>Get In Touch</h2>
+            <div class="underline"></div>
+        </div>
+        <div class="contact-grid">
+            <div class="contact-card">
+                <div class="contact-icon">📞</div>
+                <h3>Phone</h3>
+                <p>+91 98765 43210</p>
+                <p>+91 98765 43211</p>
+            </div>
+            <div class="contact-card">
+                <div class="contact-icon">✉️</div>
+                <h3>Email</h3>
+                <p>hello@eatyum.com</p>
+                <p>reserve@eatyum.com</p>
+            </div>
+            <div class="contact-card">
+                <div class="contact-icon">📍</div>
+                <h3>Location</h3>
+                <p>123 Food Street</p>
+                <p>Mumbai, Maharashtra 400001</p>
+            </div>
+        </div>
+        <div class="hours">
+            <h3>⏰ Opening Hours</h3>
+            <div class="hours-grid">
+                <div class="hours-item">
+                    <span>Monday - Friday</span>
+                    <span>11:00 AM - 11:00 PM</span>
+                </div>
+                <div class="hours-item">
+                    <span>Saturday - Sunday</span>
+                    <span>10:00 AM - 12:00 AM</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="logo">EatYum</div>
+        <p>&copy; 2025 EatYum. All rights reserved. Made with ❤️ for food lovers.</p>
+    </footer>
+
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        const menuItems = document.querySelectorAll('.menu-item');
+
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const category = btn.dataset.category;
+
+                menuItems.forEach(item => {
+                    if (category === '
