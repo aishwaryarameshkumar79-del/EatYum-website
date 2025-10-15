@@ -23,10 +23,6 @@ It features a clean layout, smooth animations, and interactive sections for menu
 
 ##  Getting Started
 
-### View Live
-Visit the live demo:  
-👉 [https://<aishwaryarameshkumar79-del)>.github.io/eatyum-website/](https://<aishwaryarameshkumar79-del>.github.io/eatyum-website/)
-
 ### Run Locally
 ```bash
 git clone https://github.com/<aishwaryarameshkumar79-del>/eatyum-website.git
